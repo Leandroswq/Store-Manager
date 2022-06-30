@@ -23,7 +23,32 @@ describe("Testes dos products services", async () => {
       sinon.stub(productsModel, "getAll").resolves([]);
       try {
         await productsService.getAll();
-        expect.fail()
+        expect.fail();
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.equal("NotFound");
+        expect(message).to.equal("Product not found");
+      }
+    });
+  });
+
+  describe("Product Service getById", async () => {
+    afterEach(() => productsModel.getById.restore());
+
+    it("Retorna apenas o produto desejado", async () => {
+      sinon
+        .stub(productsModel, "getById")
+        .resolves(mocksDatabase.oneProducts[0]);
+      const products = await productsService.getById(1);
+
+      expect(products).to.haveOwnProperty('id', 1)
+    });
+
+    it("Caso o produto desejado não exista retorne o erro 'NotFound' com a mensagem 'Product not found'", async () => {
+      sinon.stub(productsModel, "getById").resolves([]);
+      try {
+        await productsService.getById();
+        expect.fail();
       } catch (err) {
         const { name, message } = err;
         expect(name).to.equal("NotFound");
