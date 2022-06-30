@@ -17,4 +17,11 @@ module.exports = {
     }
       return product[0];
   },
+
+  async createProduct(name) {
+    const response = await model.createProduct(name);
+    const product = { id: response, name };
+
+    return product;
+  },
 };
