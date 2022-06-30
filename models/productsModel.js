@@ -9,8 +9,9 @@ module.exports = {
     return rows;
   },
 
-  async getByIdl(id) {
-    const query = 'SELECT * FROM StoreManager.products;';
+  async getById(id) {
+    const query = `SELECT * FROM StoreManager.products
+    WHERE id = ?;`;
 
     const [rows] = await connection.execute(query, [id]);
 
