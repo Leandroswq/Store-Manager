@@ -1,6 +1,7 @@
 const express = require('express');
 require('express-async-errors');
 const errorMiddleware = require('./middlewares/errorMiddlewarer');
+require('dotenv').config();
 
 const productsRouter = require('./routers/productsRouters');
 
