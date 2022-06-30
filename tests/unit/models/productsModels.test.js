@@ -29,4 +29,19 @@ after(sinon.restore)
     });
   });
 
+  describe("Product model getById, retorna apenas o produto que tenha o id requisitado", async () => {
+    afterEach(async () => {
+      connection.execute.restore();
+    });
+
+    it("Retorna o produto com id 1", async () => {
+      sinon.stub(connection, 'execute').resolves(mocksDatabase.oneProducts)
+
+      const product = await productModel.getById(1)
+
+      expect(product).to.have.lengthOf(1)
+      expect(product[0].id).to.have.equal(1)
+    })
+
+  });
 });
