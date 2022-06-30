@@ -10,4 +10,6 @@ module.exports = {
   oneProducts: [[{ id: 1, name: "Martelo de Thor" }], []],
 
   zeroProducts: [[], []],
+
+  createProduct: [{ insertId: 1 }],
 };

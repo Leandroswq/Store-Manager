@@ -6,7 +6,7 @@ const connection = require("../../../models/database/storeManager");
 const productModel = require("../../../models/productsModel");
 
 describe("Testes dos products models", () => {
-after(sinon.restore)
+  after(sinon.restore);
 
   describe("Product model getAll, retorna todos os produtos do banco de dados", async () => {
     afterEach(() => {
@@ -35,12 +35,25 @@ after(sinon.restore)
     });
 
     it("Retorna o produto com id 1", async () => {
-      sinon.stub(connection, 'execute').resolves(mocksDatabase.oneProducts)
+      sinon.stub(connection, "execute").resolves(mocksDatabase.oneProducts);
 
-      const product = await productModel.getById(1)
+      const product = await productModel.getById(1);
 
-      expect(product).to.have.lengthOf(1)
-      expect(product[0].id).to.have.equal(1)
+      expect(product).to.have.lengthOf(1);
+      expect(product[0].id).to.have.equal(1);
+    });
+  });
+
+  describe("Product model createProduct, adiciona um novo item no banco de dados", async () => {
+    afterEach(async () => {
+      connection.execute.restore();
+    });
+
+    it("retorna o id do produto criado", async () => {
+      sinon.stub(connection, "execute").resolves(mocksDatabase.createProduct);
+      const response = await productModel.createProduct('bolsa')
+
+      expect(response).to.equal(1)
     })
 
   });
