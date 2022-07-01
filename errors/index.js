@@ -10,4 +10,6 @@ const createError = (name) => {
 
 module.exports = {
   NotFoundError: createError('NotFound'),
+  BadRequestError: createError('BadRequest'),
+  UnprocessableEntity: createError('UnprocessableEntity'), 
 };
