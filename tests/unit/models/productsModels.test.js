@@ -14,17 +14,23 @@ describe("Testes dos products models", () => {
     });
 
     it("Retorna 2 produtos com uma base de dados com 2 produtos", async () => {
-      sinon.stub(connection, "execute").resolves(mocksDatabase.twoProducts);
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves(mocksDatabase.twoProducts);
       const products = await productModel.getAll();
-
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("undefined");
       expect(products).to.have.lengthOf(2);
     });
 
     it("Retorna 1 produto com uma base de dados com 1 produto", async () => {
-      sinon.stub(connection, "execute").resolves(mocksDatabase.oneProducts);
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves(mocksDatabase.oneProducts);
 
       const products = await productModel.getAll();
-
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("undefined");
       expect(products).to.have.lengthOf(1);
     });
   });
@@ -35,10 +41,14 @@ describe("Testes dos products models", () => {
     });
 
     it("Retorna o produto com id 1", async () => {
-      sinon.stub(connection, "execute").resolves(mocksDatabase.oneProducts);
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves(mocksDatabase.oneProducts);
 
       const product = await productModel.getById(1);
 
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("array");
       expect(product).to.have.lengthOf(1);
       expect(product[0].id).to.have.equal(1);
     });
@@ -50,11 +60,14 @@ describe("Testes dos products models", () => {
     });
 
     it("retorna o id do produto criado", async () => {
-      sinon.stub(connection, "execute").resolves(mocksDatabase.createProduct);
-      const response = await productModel.createProduct('bolsa')
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves(mocksDatabase.createProduct);
+      const response = await productModel.createProduct("bolsa");
 
-      expect(response).to.equal(1)
-    })
-
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("array");
+      expect(response).to.equal(1);
+    });
   });
 });
