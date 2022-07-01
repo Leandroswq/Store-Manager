@@ -2,7 +2,7 @@ const connection = require('./database/storeManager');
 
 module.exports = {
   async getAll() {
-    const query = 'SELECT * FROM products;';
+    const query = 'SELECT * FROM StoreManager.products;';
 
     const [rows] = await connection.execute(query);
 
@@ -10,7 +10,7 @@ module.exports = {
   },
 
   async getById(id) {
-    const query = `SELECT * FROM products
+    const query = `SELECT * FROM StoreManager.products
     WHERE id = ?;`;
 
     const [rows] = await connection.execute(query, [id]);
@@ -19,7 +19,7 @@ module.exports = {
   },
 
   async createProduct(name) {
-    const query = `INSERT INTO products (name)
+    const query = `INSERT INTO StoreManager.products (name)
     VALUE (?);`;
 
     const [rows] = await connection.execute(query, [name]);
