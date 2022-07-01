@@ -27,7 +27,7 @@ describe("Testes dos products services", async () => {
     });
 
     it("Retorna true se o name estiver correto", async () => {
-      const response = productsService.nameValidation('lanterna')
+      const response = await productsService.nameValidation('lanterna')
 
       expect(response).to.be.true
     });
