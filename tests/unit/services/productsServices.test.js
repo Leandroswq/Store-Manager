@@ -35,11 +35,21 @@ describe("Testes dos products services", async () => {
   describe("Product Service getById", async () => {
     afterEach(() => productsModel.getById.restore());
 
+    if ("Verifica se o model é chamado com o argumento correto", async () => {
+      const stub = sinon
+        .stub(productsModel, "getById")
+        .resolves(mocksDatabase.oneProducts[0]);
+      
+      await productsService.getById(1);
+
+      expect(stub.arguments[0]).to.include(1)
+    })
+
     it("Retorna apenas o produto desejado", async () => {
       sinon
         .stub(productsModel, "getById")
         .resolves(mocksDatabase.oneProducts[0]);
-      const products = await productsService.getById(1);
+      const products = await productsService.getById();
 
       expect(products).to.haveOwnProperty('id', 1)
     });
