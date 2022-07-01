@@ -8,6 +8,43 @@ const productsModel = require("../../../models/productsModel");
 describe("Testes dos products services", async () => {
   after(sinon.restore);
 
+  describe("Product service nameValidation", () => {
+    it("Retorna um erro 'BadRequest' quando o name for vazio", async () => {
+      try {
+        await productsService.nameValidation("");
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.be.equal("BadRequest");
+        expect(message).to.be.equal('"name" is required');
+      }
+      try {
+        await productsService.nameValidation();
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.be.equal("BadRequest");
+        expect(message).to.be.equal('"name" is required');
+      }
+    });
+
+    it("Retorna true se o name estiver correto", async () => {
+      const response = productsService.nameValidation('lanterna')
+
+      expect(response).to.be.true
+    });
+  });
+
+  it("Retorna um erro 'UnprocessableEntity' quando o name for vazio", async () => {
+    try {
+      await productsService.nameValidation("bota");
+    } catch (err) {
+      const { name, message } = err;
+      expect(name).to.be.equal("UnprocessableEntity");
+      expect(message).to.be.equal(
+        '"name" length must be at least 5 characters long'
+      );
+    }
+  });
+
   describe("Product service getAll", async () => {
     afterEach(() => productsModel.getAll.restore());
     it("Retorna todos os produtos do banco de dados", async () => {
@@ -73,13 +110,13 @@ describe("Testes dos products services", async () => {
     afterEach(() => productsModel.createProduct.restore());
 
     it("Verifica se o service retorna um objeto com o produto e o id dele", async () => {
-      const stub = sinon.stub(productsModel, 'createProduct').resolves(1)
-      const productName = 'bolsa'
+      const stub = sinon.stub(productsModel, "createProduct").resolves(1);
+      const productName = "bolsa";
 
-      const product = await productsService.createProduct(productName)
+      const product = await productsService.createProduct(productName);
 
-      expect(stub.args[0][0]).to.be.equal(productName)
-      expect(product).to.deep.equal({id: 1, name: 'bolsa'})
+      expect(stub.args[0][0]).to.be.equal(productName);
+      expect(product).to.deep.equal({ id: 1, name: "bolsa" });
     });
   });
 });
