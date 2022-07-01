@@ -35,24 +35,26 @@ describe("Testes dos products services", async () => {
   describe("Product Service getById", async () => {
     afterEach(() => productsModel.getById.restore());
 
-    if ("Verifica se o model é chamado com o argumento correto", async () => {
-      const stub = sinon
-        .stub(productsModel, "getById")
-        .resolves(mocksDatabase.oneProducts[0]);
-      
-      await productsService.getById(1);
+    if (
+      ("Verifica se o model é chamado com o argumento correto",
+      async () => {
+        const stub = sinon
+          .stub(productsModel, "getById")
+          .resolves(mocksDatabase.oneProducts[0]);
 
-      expect(stub.arguments[0]).to.include(1)
-    })
+        await productsService.getById(1);
 
-    it("Retorna apenas o produto desejado", async () => {
-      sinon
-        .stub(productsModel, "getById")
-        .resolves(mocksDatabase.oneProducts[0]);
-      const products = await productsService.getById();
+        expect(stub.arguments[0]).to.include(1);
+      })
+    )
+      it("Retorna apenas o produto desejado", async () => {
+        sinon
+          .stub(productsModel, "getById")
+          .resolves(mocksDatabase.oneProducts[0]);
+        const products = await productsService.getById();
 
-      expect(products).to.haveOwnProperty('id', 1)
-    });
+        expect(products).to.haveOwnProperty("id", 1);
+      });
 
     it("Caso o produto desejado não exista retorne o erro 'NotFound' com a mensagem 'Product not found'", async () => {
       sinon.stub(productsModel, "getById").resolves([]);
@@ -64,6 +66,20 @@ describe("Testes dos products services", async () => {
         expect(name).to.equal("NotFound");
         expect(message).to.equal("Product not found");
       }
+    });
+  });
+
+  describe("Product service createProduct", async () => {
+    afterEach(() => productsModel.createProduct.restore());
+
+    it("Verifica se o service retorna um objeto com o produto e o id dele", async () => {
+      const stub = sinon.stub(productsModel, 'createProduct').resolves(1)
+      const productName = 'bolsa'
+
+      const product = await productsService.createProduct(productName)
+
+      expect(stub.args[0][0]).to.be.equal(productName)
+      expect(product).to.deep.equal({id: 1, name: 'bolsa'})
     });
   });
 });
