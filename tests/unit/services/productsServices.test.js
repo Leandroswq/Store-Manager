@@ -31,18 +31,18 @@ describe("Testes dos products services", async () => {
 
       expect(response).to.be.true
     });
-  });
 
-  it("Retorna um erro 'UnprocessableEntity' quando o name for vazio", async () => {
-    try {
-      await productsService.nameValidation("bota");
-    } catch (err) {
-      const { name, message } = err;
-      expect(name).to.be.equal("UnprocessableEntity");
-      expect(message).to.be.equal(
-        '"name" length must be at least 5 characters long'
-      );
-    }
+    it("Retorna um erro 'UnprocessableEntity' quando o name for vazio", async () => {
+      try {
+        await productsService.nameValidation("bota");
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.be.equal("UnprocessableEntity");
+        expect(message).to.be.equal(
+          '"name" length must be at least 5 characters long'
+        );
+      }
+    });
   });
 
   describe("Product service getAll", async () => {
