@@ -64,6 +64,51 @@ describe("Testes dos products services", async () => {
     })
   });
 
+  describe("Product service validateProductQuantity", async () => {
+    it("Valida com as quantidades corretas", async () => {
+      const response = await productsService.validateProductQuantity(mocksDatabase.twoProductsSales)
+      
+      expect(response).to.be.true
+    })
+
+    it("Valida com o produto sem o campo quantity", async () => {
+      try {
+        await productsService.validateProductQuantity([{ productId: 1 }]);
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.equal("BadRequest");
+        expect(message).to.equal('"quantity" is required');
+      }
+    });
+    
+    it("Valida com o produto com o campo quantity = 0", async () => {
+      try {
+        await productsService.validateProductQuantity([{ productId: 1 , quantity: 0}]);
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.equal("UnprocessableEntity");
+        expect(message).to.equal(
+          '"quantity" must be greater than or equal to 1'
+        );
+      }
+    });
+    
+    it("Valida com o produto com o campo quantity < 0", async () => {
+      try {
+        await productsService.validateProductQuantity([
+          { productId: 1, quantity: -5 },
+        ]);
+      } catch (err) {
+        const { name, message } = err;
+        expect(name).to.equal("UnprocessableEntity");
+        expect(message).to.equal(
+          '"quantity" must be greater than or equal to 1'
+        );
+      }
+    });
+    
+  });
+
   describe("Product service getAll", async () => {
     afterEach(() => productsModel.getAll.restore());
     it("Retorna todos os produtos do banco de dados", async () => {
