@@ -33,7 +33,7 @@ module.exports = {
       const isNull = joi.number().integer().required().validate(product.quantity);
 
       if (isNull.error) {
-        throw new error.UnprocessableEntity('"quantity" is required');
+        throw new error.BadRequestError('"quantity" is required');
       }
 
       if (product.quantity <= 0) {
