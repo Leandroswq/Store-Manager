@@ -6,7 +6,7 @@ const productsService = require("../../../services/productsService");
 const productsModel = require("../../../models/productsModel");
 
 describe("Testes dos products services", async () => {
-  after(sinon.restore);
+  afterEach(sinon.restore);
 
   describe("Product service nameValidation", () => {
     it("Retorna um erro 'BadRequest' quando o name for vazio", async () => {
@@ -108,6 +108,38 @@ describe("Testes dos products services", async () => {
     });
     
   });
+
+  describe("Product service validateProductsExist", async () => {
+    it("Todos os produtos existem no banco de dados", async () => {
+      sinon
+        .stub(productsModel, 'getAllById')
+        .resolves(mocksDatabase.twoProducts)
+      
+      const response = await productsService.validateProductsExist(
+        mocksDatabase.twoProducts
+      )
+
+      expect(response).to.be.true
+    })
+
+    it("Produto com id não existente no banco de dados", async () => {
+      sinon
+        .stub(productsModel, 'getAllById')
+        .resolves(mocksDatabase.oneProductsSales)
+      try {
+        await productsService.validateProductsExist(
+          mocksDatabase.twoProducts
+        )        
+      } catch (err) {
+        const { name, message } = err
+        expect(name).to.equal("NotFound");
+        expect(message).to.equal("Product not found");
+      }
+      
+    })
+
+  });
+    
 
   describe("Product service getAll", async () => {
     afterEach(() => productsModel.getAll.restore());
