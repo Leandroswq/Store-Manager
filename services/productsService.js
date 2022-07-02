@@ -16,10 +16,24 @@ module.exports = {
     return true;
   },
 
+  validateProductId(products) {
+    products.forEach((product) => {
+      const isNull = joi.number().required.validate(product.productId);
+
+      if (isNull.error) {
+        throw new error.BadRequestError('"productId" is required');
+      }
+    });
+
+    return true;
+  },
+
   async getAll() {
     const products = await model.getAll();
 
-    if (products.length === 0) { throw new error.NotFoundError('Product not found'); }
+    if (products.length === 0) {
+      throw new error.NotFoundError('Product not found');
+    }
     return products;
   },
 
