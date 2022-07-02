@@ -45,6 +45,25 @@ describe("Testes dos products services", async () => {
     });
   });
 
+  describe("Product service validateProductId", async () => {
+    it("Validação com os ids corretos", async () => {
+      const response = await productsService.validateProductId(mocksDatabase.twoProductsSales)
+      expect(response).to.be.true
+    })
+    it('Validação com os ids incorretos', async () => {
+      try {        
+        const response = await productsService.validateProductId([        
+        { quantity: 1 },
+        { productId: 2, quantity: 5 },
+        ]);
+      } catch (err) {
+        const { name, message } = err
+        expect(name).to.equal("BadRequest");
+        expect(message).to.equal('"productId" is required');
+      }
+    })
+  });
+
   describe("Product service getAll", async () => {
     afterEach(() => productsModel.getAll.restore());
     it("Retorna todos os produtos do banco de dados", async () => {
