@@ -4,9 +4,9 @@ const connection = require('./database/storeManager');
 module.exports = {
   async createSaleId() {
     const querySale = 'INSERT INTO StoreManager.sales() VALUES();';
-    const [{ insertId: saleId }] = await connection.execute(querySale);
+    const [{ insertId }] = await connection.execute(querySale);
 
-    return saleId;
+    return insertId;
   },
   async createSaleProducts(id, products) {
     // query inspirada no video https://youtu.be/LgLxg2WVrTY?t=724
