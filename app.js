@@ -4,7 +4,7 @@ const errorMiddleware = require('./middlewares/errorMiddlewarer');
 require('dotenv').config();
 
 const productsRouter = require('./routers/productsRouters');
-const salesRouter = require('./routers/salesService');
+const salesRouter = require('./routers/salesRouters');
 
 const app = express();
 
