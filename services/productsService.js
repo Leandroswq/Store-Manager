@@ -18,7 +18,7 @@ module.exports = {
 
   validateProductId(products) {
     products.forEach((product) => {
-      const isNull = joi.number().required.validate(product.productId);
+      const isNull = joi.number().integer().required().validate(product.productId);
 
       if (isNull.error) {
         throw new error.BadRequestError('"productId" is required');
