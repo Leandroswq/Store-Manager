@@ -28,6 +28,24 @@ module.exports = {
     return true;
   },
 
+  validateProductQuantity(products) {
+    products.forEach((product) => {
+      const isNull = joi.number().integer().required().validate(product.quantity);
+
+      if (isNull.error) {
+        throw new error.BadRequestError('"quantity" is required');
+      }
+
+      if (product.quantity <= 0) {
+        throw new error.BadRequestError(
+          '"quantity" must be greater than or equal to 1',
+        );
+      }
+    });
+
+    return true;
+  },
+  
   async getAll() {
     const products = await model.getAll();
 
