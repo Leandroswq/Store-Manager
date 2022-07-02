@@ -17,7 +17,7 @@ module.exports = {
     { productId: 1, quantity: 1 },
     { productId: 2, quantity: 5 },
   ],
-  oneProductsSales: [
-    { productId: 1, quantity: 3 },
-  ],
+  oneProductsSales: [{ productId: 1, quantity: 3 }],
+
+  twoProductsSalesCreated: { id: 3, itemsSold : this.twoProductsSales},
 };
