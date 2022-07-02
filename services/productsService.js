@@ -46,6 +46,13 @@ module.exports = {
     return true;
   },
   
+  async validateProductsExist(products) {
+    const rows = await model.getAllById(products);
+    if (rows.length !== products.length) throw new error.NotFoundError('Product not found');
+
+    return true;
+  },
+
   async getAll() {
     const products = await model.getAll();
 
