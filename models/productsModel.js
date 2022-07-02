@@ -9,6 +9,15 @@ module.exports = {
     return rows;
   },
 
+  async getAllById(products) {
+    const query = 'SELECT * FROM StoreManager.products WHERE id IN (?);';
+    const queryValues = products.map(({ productId }) => productId);
+    console.log(queryValues);
+    const [rows] = await connection.query(query, [queryValues]);
+
+    return rows;
+  },
+
   async getById(id) {
     const query = `SELECT * FROM StoreManager.products
     WHERE id = ?;`;
