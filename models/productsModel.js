@@ -12,7 +12,7 @@ module.exports = {
   async getAllById(products) {
     const query = 'SELECT * FROM StoreManager.products WHERE id IN (?);';
     const queryValues = products.map(({ productId }) => productId);
-    console.log(queryValues);
+
     const [rows] = await connection.query(query, [queryValues]);
 
     return rows;
