@@ -37,7 +37,7 @@ module.exports = {
       }
 
       if (product.quantity <= 0) {
-        throw new error.BadRequestError(
+        throw new error.UnprocessableEntity(
           '"quantity" must be greater than or equal to 1',
         );
       }
