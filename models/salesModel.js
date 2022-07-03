@@ -2,6 +2,19 @@
 const connection = require('./database/storeManager');
 
 module.exports = {
+  async getAll() {
+    const query = `SELECT sa.id AS saleId, sa.${'`date`'},
+    sa_pro.product_id AS productId, sa_pro.quantity
+    FROM StoreManager.sales AS sa
+    INNER JOIN StoreManager.sales_products AS sa_pro
+    ON sa.id = sa_pro.sale_id
+    ORDER BY saleId ASC;`;
+
+    const [rows] = await connection.execute(query);
+
+    return rows;
+  },
+
   async createSaleId() {
     const querySale = 'INSERT INTO StoreManager.sales() VALUES();';
     const [{ insertId }] = await connection.execute(querySale);
