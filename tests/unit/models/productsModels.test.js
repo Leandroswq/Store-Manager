@@ -9,7 +9,6 @@ describe("Testes dos products models", () => {
   afterEach(sinon.restore);
 
   describe("Product model getAll, retorna todos os produtos do banco de dados", async () => {
-
     it("Retorna 2 produtos com uma base de dados com 2 produtos", async () => {
       const stub = sinon
         .stub(connection, "execute")
@@ -29,6 +28,20 @@ describe("Testes dos products models", () => {
       expect(stub.args[0][0]).to.be.a("string");
       expect(stub.args[0][1]).to.be.a("undefined");
       expect(products).to.have.lengthOf(1);
+    });
+  });
+
+  describe("Product model getAllById retorna todos os produtos com os ids especificados", async () => {
+    it("Retorna todos os produtos com os ids iguais aos dos produtos passados", async () => {
+      const stub = sinon
+        .stub(connection, "query")
+        .resolves(mocksDatabase.twoProducts);
+
+      const products = await productModel.getAllById(mocksDatabase.twoProducts);
+
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.deep.a("array");
+      expect(products).to.have.lengthOf(2);
     });
   });
 
