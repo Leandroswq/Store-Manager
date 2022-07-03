@@ -6,12 +6,9 @@ const connection = require("../../../models/database/storeManager");
 const productModel = require("../../../models/productsModel");
 
 describe("Testes dos products models", () => {
-  after(sinon.restore);
+  afterEach(sinon.restore);
 
   describe("Product model getAll, retorna todos os produtos do banco de dados", async () => {
-    afterEach(() => {
-      connection.execute.restore();
-    });
 
     it("Retorna 2 produtos com uma base de dados com 2 produtos", async () => {
       const stub = sinon
