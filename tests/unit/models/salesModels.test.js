@@ -21,6 +21,21 @@ describe("Testes dos services models", async () => {
     })
   })
 
+  describe("Sales model getById", async () => {
+    it("Retorna as vendas pelo id", async () => {
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([mocksDatabase.oneSaleswithoutId]);
+
+      const response = await salesModel.getById(1);
+
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("array");
+      expect(response).lengthOf(2);
+      
+    });    
+  })
+
   describe("Sales model createSaleId", async () => {
     it("Adiciona uma venda no banco de dados e retorna o id da venda", async () => {
       sinon.stub(connection, "execute").resolves([{ insertId: 1 }]);
