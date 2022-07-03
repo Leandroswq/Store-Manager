@@ -77,4 +77,10 @@ module.exports = {
 
     return product;
   },
+
+  async updateProduct(id, name) {
+    const response = await model.updateProduct(id, name);
+    if (response === 0) throw new error.NotFoundError('Product not found');
+    return response;
+  },
 };
