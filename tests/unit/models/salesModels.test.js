@@ -8,7 +8,20 @@ const salesModel = require("../../../models/salesModel");
 describe("Testes dos services models", async () => {
   afterEach(sinon.restore);
 
-  describe("Service model createSaleId", async () => {
+  describe("Sales model getAll", async () => {
+    it("Retorna todas as vendas", async () => {
+      const stub = sinon.stub(connection, 'execute').resolves([mocksDatabase.twoSalesWithId])
+
+      const response = await salesModel.getAll()
+
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("undefined");
+      expect(response).lengthOf(3)
+      
+    })
+  })
+
+  describe("Sales model createSaleId", async () => {
     it("Adiciona uma venda no banco de dados e retorna o id da venda", async () => {
       sinon.stub(connection, "execute").resolves([{ insertId: 1 }]);
 
@@ -18,7 +31,7 @@ describe("Testes dos services models", async () => {
     });
   });
 
-  describe("Service model createSaleProducts", async () => {
+  describe("Sales model createSaleProducts", async () => {
     it("Adiciona os produtos da venda ao banco de dados", async () => {
       sinon.stub(connection, "execute").resolves([{ affectedRows: 2 }]);
 
