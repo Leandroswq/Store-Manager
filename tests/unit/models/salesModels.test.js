@@ -5,7 +5,7 @@ const mocksDatabase = require("../MocksDatabase");
 const connection = require("../../../models/database/storeManager");
 const salesModel = require("../../../models/salesModel");
 
-describe("Testes dos services models", async () => {
+describe("Testes dos sales models", async () => {
   afterEach(sinon.restore);
 
   describe("Sales model getAll", async () => {
@@ -48,7 +48,7 @@ describe("Testes dos services models", async () => {
 
   describe("Sales model createSaleProducts", async () => {
     it("Adiciona os produtos da venda ao banco de dados", async () => {
-      sinon.stub(connection, "execute").resolves([{ affectedRows: 2 }]);
+      sinon.stub(connection, "query").resolves([{ affectedRows: 2 }]);
 
       const response = await salesModel.createSaleProducts(
         2,
