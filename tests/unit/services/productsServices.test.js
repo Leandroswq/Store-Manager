@@ -215,4 +215,32 @@ describe("Testes dos products services", async () => {
       expect(product).to.deep.equal({ id: 1, name: "bolsa" });
     });
   });
+
+  describe("Product service updateProduct", async () => {
+    it("Verifica se o service retorna a quantidade de linhas atualizadas", async () => {
+      sinon.stub(productsModel, 'updateProduct').resolves(1)
+
+      const id = 2
+      const name = "bola"
+      const response = await productsService.updateProduct(id, name)
+
+      expect(response).to.equal(1)
+    })
+
+    it("Verifica se o service retorna um 'NotFoundError' caso o produto a ser atualizado não exista", async () => {
+      sinon.stub(productsModel, 'updateProduct').resolves(0)
+      const id = 2
+      const name = "bola"
+      try {
+        await productsService.updateProduct(id, name);
+        expect.fail()
+      } catch (err) {
+        const { name, message } = err
+        
+        expect(name).to.equal("NotFound")
+        expect(message).to.equal("Product not found")
+      }
+
+    });
+  });
 });
