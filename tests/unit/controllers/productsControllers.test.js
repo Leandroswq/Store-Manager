@@ -18,7 +18,7 @@ describe("Testes dos products controllers", async () => {
     response.json = sinon.stub().returns();
   });
 
-  after(() => sinon.restore());
+  afterEach(() => sinon.restore());
 
   describe("Product controller getAll", async () => {
     it("Testa se o controller retorna o status 200 e os produtos no body response", async () => {
@@ -57,5 +57,17 @@ describe("Testes dos products controllers", async () => {
       expect(response.json.calledWith(resolveMock)).to.be.true;
 
     });
+  });
+
+  describe("Product controller updateProduct", async () => {
+    it("Verifica se o controller retorna o status 200 com o produto com os valores atualizado", async () => {
+      sinon.stub(productsService, 'updateProduct').resolves(1)
+      request.params.id = 1
+      request.body.name = "bolas"
+      await productsControllers.updateProduct(request, response)
+
+      expect(response.status.calledWith(200)).to.be.true
+      expect(response.json.calledWith({id:1, name: "bolas"})).to.be.true
+    })
   });
 });
