@@ -31,4 +31,11 @@ module.exports = {
 
     return response;
   },
+
+  async updateSaleProducts(id, products) {
+    await model.deleteSaleProducts(id);
+    await model.createSaleProducts(id, products);
+    const sale = { saleId: id, itemsUpdated: products };
+    return sale;
+  },
 };
