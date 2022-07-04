@@ -47,4 +47,12 @@ module.exports = {
 
     return rows.affectedRows;
   },
+
+  async deleteSale(id) {
+    const query = 'DELETE FROM StoreManager.sales WHERE id = ?;';
+
+    const [rows] = await connection.execute(query, [id]);
+
+    return rows.affectedRows;
+  },
 };
