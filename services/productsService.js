@@ -2,6 +2,8 @@ const joi = require('joi');
 const model = require('../models/productsModel');
 const error = require('../errors/index');
 
+const productNotFound = 'Product not found';
+
 module.exports = {
   async nameValidation(name) {
     const required = joi.string().required().validate(name);
@@ -48,7 +50,7 @@ module.exports = {
   
   async validateProductsExist(products) {
     const rows = await model.getAllById(products);
-    if (rows.length !== products.length) throw new error.NotFoundError('Product not found');
+    if (rows.length !== products.length) throw new error.NotFoundError(productNotFound);
 
     return true;
   },
@@ -57,7 +59,7 @@ module.exports = {
     const products = await model.getAll();
 
     if (products.length === 0) {
-      throw new error.NotFoundError('Product not found');
+      throw new error.NotFoundError(productNotFound);
     }
     return products;
   },
@@ -66,7 +68,7 @@ module.exports = {
     const product = await model.getById(id);
 
     if (product.length === 0) {
-      throw new error.NotFoundError('Product not found');
+      throw new error.NotFoundError(productNotFound);
     }
     return product[0];
   },
@@ -80,7 +82,15 @@ module.exports = {
 
   async updateProduct(id, name) {
     const response = await model.updateProduct(id, name);
-    if (response === 0) throw new error.NotFoundError('Product not found');
+    if (response === 0) throw new error.NotFoundError(productNotFound);
+    return response;
+  },
+
+  async deleteProduct(id) {
+    const response = await model.deleteProduct(id);
+
+    if (response <= 0) throw new error.NotFoundError(productNotFound);
+
     return response;
   },
 };
