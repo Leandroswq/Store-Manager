@@ -80,4 +80,19 @@ describe("Testes dos products models", () => {
       expect(response).to.equal(1);
     });
   });
+
+  describe("Product model updateProduct", async () => {
+    it("Atualiza um produto pelo id", async () => {
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([{ changedRows: 1 }]);
+      const id = 2
+      const name = "bola"
+      const response = await productModel.updateProduct(id, name);
+
+      expect(response).to.equal(1)
+      expect(stub.args[0][0]).to.a("string")
+      expect(stub.args[0][1]).to.a("array");
+    });
+  });
 });
