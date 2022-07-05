@@ -93,4 +93,12 @@ module.exports = {
 
     return response;
   },
+
+  async searchProductsByName(name) {
+    const products = await model.searchProductsByName(name);
+
+    if (products.length === 0) throw new error.NotFoundError(productNotFound);
+
+    return products;
+  },
 };
