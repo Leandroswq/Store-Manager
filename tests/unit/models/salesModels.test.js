@@ -71,4 +71,17 @@ describe("Testes dos sales models", async () => {
       expect(response).to.equal(1);
     });
   });
+
+  describe("Sales model deleteSaleProducts", async () => {
+    it("deleta os produtos de uma venda", async () => {
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([{ affectedRows: 3 }]);
+      const response = await salesModel.deleteSaleProducts(1);
+
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("array");
+      expect(response).to.equal(3);
+    });
+  });
 });
