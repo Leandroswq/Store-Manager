@@ -27,9 +27,9 @@ describe("Testes dos products services", async () => {
     });
 
     it("Retorna true se o name estiver correto", async () => {
-      const response = await productsService.nameValidation('lanterna')
+      const response = await productsService.nameValidation("lanterna");
 
-      expect(response).to.be.true
+      expect(response).to.be.true;
     });
 
     it("Retorna um erro 'UnprocessableEntity' quando o name for vazio", async () => {
@@ -47,29 +47,33 @@ describe("Testes dos products services", async () => {
 
   describe("Product service validateProductId", async () => {
     it("Validação com os ids corretos", async () => {
-      const response = await productsService.validateProductId(mocksDatabase.twoProductsSales)
-      expect(response).to.be.true
-    })
-    it('Validação com os ids incorretos', async () => {
-      try {        
-        const response = await productsService.validateProductId([        
-        { quantity: 1 },
-        { productId: 2, quantity: 5 },
+      const response = await productsService.validateProductId(
+        mocksDatabase.twoProductsSales
+      );
+      expect(response).to.be.true;
+    });
+    it("Validação com os ids incorretos", async () => {
+      try {
+        const response = await productsService.validateProductId([
+          { quantity: 1 },
+          { productId: 2, quantity: 5 },
         ]);
       } catch (err) {
-        const { name, message } = err
+        const { name, message } = err;
         expect(name).to.equal("BadRequest");
         expect(message).to.equal('"productId" is required');
       }
-    })
+    });
   });
 
   describe("Product service validateProductQuantity", async () => {
     it("Valida com as quantidades corretas", async () => {
-      const response = await productsService.validateProductQuantity(mocksDatabase.twoProductsSales)
-      
-      expect(response).to.be.true
-    })
+      const response = await productsService.validateProductQuantity(
+        mocksDatabase.twoProductsSales
+      );
+
+      expect(response).to.be.true;
+    });
 
     it("Valida com o produto sem o campo quantity", async () => {
       try {
@@ -80,10 +84,12 @@ describe("Testes dos products services", async () => {
         expect(message).to.equal('"quantity" is required');
       }
     });
-    
+
     it("Valida com o produto com o campo quantity = 0", async () => {
       try {
-        await productsService.validateProductQuantity([{ productId: 1 , quantity: 0}]);
+        await productsService.validateProductQuantity([
+          { productId: 1, quantity: 0 },
+        ]);
       } catch (err) {
         const { name, message } = err;
         expect(name).to.equal("UnprocessableEntity");
@@ -92,7 +98,7 @@ describe("Testes dos products services", async () => {
         );
       }
     });
-    
+
     it("Valida com o produto com o campo quantity < 0", async () => {
       try {
         await productsService.validateProductQuantity([
@@ -106,40 +112,34 @@ describe("Testes dos products services", async () => {
         );
       }
     });
-    
   });
 
   describe("Product service validateProductsExist", async () => {
     it("Todos os produtos existem no banco de dados", async () => {
       sinon
-        .stub(productsModel, 'getAllById')
-        .resolves(mocksDatabase.twoProducts)
-      
+        .stub(productsModel, "getAllById")
+        .resolves(mocksDatabase.twoProducts);
+
       const response = await productsService.validateProductsExist(
         mocksDatabase.twoProducts
-      )
+      );
 
-      expect(response).to.be.true
-    })
+      expect(response).to.be.true;
+    });
 
     it("Produto com id não existente no banco de dados", async () => {
       sinon
-        .stub(productsModel, 'getAllById')
-        .resolves(mocksDatabase.oneProductsSales)
+        .stub(productsModel, "getAllById")
+        .resolves(mocksDatabase.oneProductsSales);
       try {
-        await productsService.validateProductsExist(
-          mocksDatabase.twoProducts
-        )        
+        await productsService.validateProductsExist(mocksDatabase.twoProducts);
       } catch (err) {
-        const { name, message } = err
+        const { name, message } = err;
         expect(name).to.equal("NotFound");
         expect(message).to.equal("Product not found");
       }
-      
-    })
-
+    });
   });
-    
 
   describe("Product service getAll", async () => {
     afterEach(() => productsModel.getAll.restore());
@@ -218,29 +218,51 @@ describe("Testes dos products services", async () => {
 
   describe("Product service updateProduct", async () => {
     it("Verifica se o service retorna a quantidade de linhas atualizadas", async () => {
-      sinon.stub(productsModel, 'updateProduct').resolves(1)
+      sinon.stub(productsModel, "updateProduct").resolves(1);
 
-      const id = 2
-      const name = "bola"
-      const response = await productsService.updateProduct(id, name)
+      const id = 2;
+      const name = "bola";
+      const response = await productsService.updateProduct(id, name);
 
-      expect(response).to.equal(1)
-    })
+      expect(response).to.equal(1);
+    });
 
     it("Verifica se o service retorna um 'NotFoundError' caso o produto a ser atualizado não exista", async () => {
-      sinon.stub(productsModel, 'updateProduct').resolves(0)
-      const id = 2
-      const name = "bola"
+      sinon.stub(productsModel, "updateProduct").resolves(0);
+      const id = 2;
+      const name = "bola";
       try {
         await productsService.updateProduct(id, name);
-        expect.fail()
+        expect.fail();
       } catch (err) {
-        const { name, message } = err
-        
-        expect(name).to.equal("NotFound")
-        expect(message).to.equal("Product not found")
-      }
+        const { name, message } = err;
 
+        expect(name).to.equal("NotFound");
+        expect(message).to.equal("Product not found");
+      }
     });
   });
+  
+  describe("Product service deleteProduct", async () => {
+    it("Verifica se deleta um produto com sucesso", async () => {
+      sinon.stub(productsModel, "deleteProduct").resolves(1);
+      const response = await productsService.deleteProduct(1);
+
+      expect(response).to.equal(1);
+    });
+
+    it("Verifica se retorna um 'NotFoundError' caso o produto não exista", async () => {
+      sinon.stub(productsModel, "deleteProduct").resolves(0);
+      try {
+        await productsService.deleteProduct(1);
+        expect.fail();
+      } catch (err) {
+        const { name, message } = err;
+
+        expect(name).to.equal("NotFound");
+        expect(message).to.equal("Product not found");
+      }
+    });
+  });
+
 });
