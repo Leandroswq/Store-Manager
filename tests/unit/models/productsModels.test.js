@@ -108,5 +108,17 @@ describe("Testes dos products models", () => {
       expect(stub.args[0][0]).to.a("string");
       expect(stub.args[0][1]).to.a("array");
     });
+
+    describe("Product model searchProductsByName", async () => {
+      it("Retorna os produtos que tenha no name a string passada como parametro", async () => {
+        const stub = sinon.stub(connection, "execute").resolves([1]);
+        const name = "bolsa";
+        const response = await productModel.searchProductsByName(name);
+
+        expect(response).to.equal(1);
+        expect(stub.args[0][0]).to.a("string");
+        expect(stub.args[0][1]).to.a("array");
+      })
+    });
   });
 });
