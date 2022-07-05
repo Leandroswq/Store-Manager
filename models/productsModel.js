@@ -54,4 +54,13 @@ module.exports = {
 
     return rows.affectedRows;
   },
+
+  async searchProductsByName(name) {
+    const query = 'SELECT * FROM StoreManager.products WHERE name LIKE ?;';
+    const queryValue = `%${name}%`;
+
+    const [rows] = await connection.execute(query, [queryValue]);
+
+    return rows;
+  },
 };
