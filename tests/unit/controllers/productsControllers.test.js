@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
-const mocksDatabase = require("../MocksDatabase");
 
 const productsService = require("../../../services/productsService");
 const productsControllers = require("../../../controllers/productsControllers.js");
@@ -16,6 +15,7 @@ describe("Testes dos products controllers", async () => {
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
+    response.sendStatus = sinon.stub().returns()
   });
 
   afterEach(() => sinon.restore());
@@ -68,6 +68,17 @@ describe("Testes dos products controllers", async () => {
 
       expect(response.status.calledWith(200)).to.be.true
       expect(response.json.calledWith({id:1, name: "bolas"})).to.be.true
+    })
+  });
+
+  describe("Product controller deleteProduct", async () => {
+    it("Retorna o status 204, sem nenhuma resposta", async () => {
+      sinon.stub(productsService, 'deleteProduct').resolves()
+      request.params.id = 1
+      
+      await productsControllers.deleteProduct(request, response)
+
+      expect(response.sendStatus.calledWith(204)).to.be.true
     })
   });
 });
