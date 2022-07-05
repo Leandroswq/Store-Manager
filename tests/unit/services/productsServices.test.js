@@ -242,7 +242,7 @@ describe("Testes dos products services", async () => {
       }
     });
   });
-  
+
   describe("Product service deleteProduct", async () => {
     it("Verifica se deleta um produto com sucesso", async () => {
       sinon.stub(productsModel, "deleteProduct").resolves(1);
@@ -265,4 +265,26 @@ describe("Testes dos products services", async () => {
     });
   });
 
+  describe("Product service searchProductsByName", async () => {
+    it("Verifica se acha o produto com o name desejado", async () => {
+      sinon.stub(productsModel, "searchProductsByName").resolves([1, 2]);
+
+      const response = await productsService.searchProductsByName("bola");
+
+      expect(response).to.have.lengthOf(2);
+    });
+
+    it("Verifica se retorna um caso não retorne nenhum produto", async () => {
+      sinon.stub(productsModel, "searchProductsByName").resolves([]);
+      try {
+        await productsService.searchProductsByName("bola");
+        expect.fail();
+      } catch (err) {
+        const { name, message } = err;
+
+        expect(name).to.equal("NotFound");
+        expect(message).to.equal("Product not found");
+      }
+    });
+  });
 });
