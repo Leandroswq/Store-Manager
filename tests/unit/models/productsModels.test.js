@@ -86,12 +86,26 @@ describe("Testes dos products models", () => {
       const stub = sinon
         .stub(connection, "execute")
         .resolves([{ changedRows: 1 }]);
-      const id = 2
-      const name = "bola"
+      const id = 2;
+      const name = "bola";
       const response = await productModel.updateProduct(id, name);
 
-      expect(response).to.equal(1)
-      expect(stub.args[0][0]).to.a("string")
+      expect(response).to.equal(1);
+      expect(stub.args[0][0]).to.a("string");
+      expect(stub.args[0][1]).to.a("array");
+    });
+  });
+
+  describe("Product model deleteProduct", async () => {
+    it("Deleta um produto pelo id", async () => {
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([{ affectedRows: 1 }]);
+      const id = 2;
+      const response = await productModel.deleteProduct(id);
+
+      expect(response).to.equal(1);
+      expect(stub.args[0][0]).to.a("string");
       expect(stub.args[0][1]).to.a("array");
     });
   });
