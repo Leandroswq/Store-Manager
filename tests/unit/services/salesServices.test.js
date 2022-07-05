@@ -58,4 +58,28 @@ describe("Testes do sales services", async () => {
       expect(response).to.deep.equal(sale);
     });
   });
+
+  describe("Sales service deleteSale", async () => {
+    it("Deleta uma venda com sucesso", async () => {
+      sinon.stub(salesModel, "deleteSale").resolves(1)
+      const id = 5
+      const response = await salesService.deleteSale(id)
+
+      expect(response).to.equal(1)
+    })
+
+    it("Se o produto não existir retorna um NotFoundError", async () => {
+      sinon.stub(salesModel, "deleteSale").resolves(0)
+      try {
+        await salesService.deleteSale(5)
+        expect.fail()
+      } catch (err) {
+        const { name, message } = err
+
+        expect(name).to.equal("NotFound")
+        expect(message).to.equal("Sale not found");
+      }
+
+    })
+  });
 });
