@@ -24,7 +24,7 @@ module.exports = {
     return sale;
   },
 
-  async deleteProduct(id) {
+  async deleteSale(id) {
     const response = await model.deleteSale(id);
 
     if (response <= 0) throw new error.NotFoundError(saleNotFound);
