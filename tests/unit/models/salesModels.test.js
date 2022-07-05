@@ -10,16 +10,17 @@ describe("Testes dos sales models", async () => {
 
   describe("Sales model getAll", async () => {
     it("Retorna todas as vendas", async () => {
-      const stub = sinon.stub(connection, 'execute').resolves([mocksDatabase.twoSalesWithId])
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([mocksDatabase.twoSalesWithId]);
 
-      const response = await salesModel.getAll()
+      const response = await salesModel.getAll();
 
       expect(stub.args[0][0]).to.be.a("string");
       expect(stub.args[0][1]).to.be.a("undefined");
-      expect(response).lengthOf(3)
-      
-    })
-  })
+      expect(response).lengthOf(3);
+    });
+  });
 
   describe("Sales model getById", async () => {
     it("Retorna as vendas pelo id", async () => {
@@ -32,9 +33,8 @@ describe("Testes dos sales models", async () => {
       expect(stub.args[0][0]).to.be.a("string");
       expect(stub.args[0][1]).to.be.a("array");
       expect(response).lengthOf(2);
-      
-    });    
-  })
+    });
+  });
 
   describe("Sales model createSaleId", async () => {
     it("Adiciona uma venda no banco de dados e retorna o id da venda", async () => {
@@ -56,6 +56,19 @@ describe("Testes dos sales models", async () => {
       );
 
       expect(response).to.equal(2);
+    });
+  });
+
+  describe("Sales model deleteSale", async () => {
+    it("deleta uma venda que possua o id passado como argumento da função", async () => {
+      const stub = sinon
+        .stub(connection, "execute")
+        .resolves([{ affectedRows: 1 }]);
+      const response = await salesModel.deleteSale(1);
+
+      expect(stub.args[0][0]).to.be.a("string");
+      expect(stub.args[0][1]).to.be.a("array");
+      expect(response).to.equal(1);
     });
   });
 });
