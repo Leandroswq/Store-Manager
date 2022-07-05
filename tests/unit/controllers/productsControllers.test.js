@@ -12,6 +12,7 @@ describe("Testes dos products controllers", async () => {
   beforeEach(() => {
     request.body = {};
     request.params = {};
+    request.query = {}
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
@@ -79,6 +80,17 @@ describe("Testes dos products controllers", async () => {
       await productsControllers.deleteProduct(request, response)
 
       expect(response.sendStatus.calledWith(204)).to.be.true
+    })
+  });
+
+  describe("Product controller searchProductsByName", async () => {
+    it("Retorna o status 200 e os produtos que satisfazem a query", async () => {
+      sinon.stub(productsService, "searchProductsByName").resolves(1);
+      request.query.q = "bolsa"
+      await productsControllers.searchProductsByName(request, response)
+
+      expect(response.status.calledWith(200)).to.be.true
+      expect(response.json.calledWith(1)).to.be.true
     })
   });
 });
