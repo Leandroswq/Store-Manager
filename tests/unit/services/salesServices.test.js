@@ -61,25 +61,43 @@ describe("Testes do sales services", async () => {
 
   describe("Sales service deleteSale", async () => {
     it("Deleta uma venda com sucesso", async () => {
-      sinon.stub(salesModel, "deleteSale").resolves(1)
-      const id = 5
-      const response = await salesService.deleteSale(id)
+      sinon.stub(salesModel, "deleteSale").resolves(1);
+      const id = 5;
+      const response = await salesService.deleteSale(id);
 
-      expect(response).to.equal(1)
-    })
+      expect(response).to.equal(1);
+    });
 
     it("Se o produto não existir retorna um NotFoundError", async () => {
-      sinon.stub(salesModel, "deleteSale").resolves(0)
+      sinon.stub(salesModel, "deleteSale").resolves(0);
       try {
-        await salesService.deleteSale(5)
-        expect.fail()
+        await salesService.deleteSale(5);
+        expect.fail();
       } catch (err) {
-        const { name, message } = err
+        const { name, message } = err;
 
-        expect(name).to.equal("NotFound")
+        expect(name).to.equal("NotFound");
         expect(message).to.equal("Sale not found");
       }
+    });
+  });
 
-    })
+  describe("Sales service updateSaleProducts", async () => {
+    it("Atualiza os produtos de uma venda", async () => {
+      const stubDelet = sinon.stub(salesModel, "deleteSaleProducts").resolves();
+      const stubCreate = sinon
+        .stub(salesModel, "createSaleProducts")
+        .resolves();
+      
+      const id = 5
+      const products = mocksDatabase.twoProductsSales
+      const response = await salesService.updateSaleProducts(id, products)
+      
+      expect(stubDelet.calledWith(id)).to.be.true
+      expect(stubCreate.calledWith(id, products)).to.be.true
+      expect(response).to.have.property("saleId", id);
+      expect(response).to.have.property("itemsUpdated", products);
+
+    });
   });
 });
