@@ -17,6 +17,7 @@ describe("Testes do sales controller", async () => {
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
+    response.sendStatus = sinon.stub().returns()
   });
 
   describe("Sales controler getAll", async () => {
@@ -56,5 +57,16 @@ describe("Testes do sales controller", async () => {
       expect(response.json.calledWith(1)).to
         .be.true;
     });
+  });
+
+  describe("Sales controller deleteSale", async () => {
+    it("Retorna apenas o status 204 ao deletar uma venda com sucesso", async () => {
+      const stub = sinon.stub(salesService, 'deleteSale').resolves()
+      request.params.id = 5
+      await salesController.deleteSale(request, response)
+
+      expect(stub.called).to.be.true
+      expect(response.sendStatus.calledWith(204)).to.be.true
+    })
   });
 });
