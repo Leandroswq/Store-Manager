@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tryber/sd-02-project-store-manager.git"
+    "url": "https://github.com/Leandroswq/talker-manager"
   },
-  "author": "",
+  "author": "Leandro Bonfim",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tryber/sd-02-project-store-manager/issues"
+    "url": "https://github.com/Leandroswq/talker-manager/issues"
   },
-  "homepage": "https://github.com/tryber/sd-02-project-store-manager#readme",
+  "homepage": "https://github.com/Leandroswq/talker-manager#readme",
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "body-parser": "^1.19.0",
