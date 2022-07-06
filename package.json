@@ -13,6 +13,7 @@
     "start": "node index.js",
     "debug": "nodemon --ignore coverage index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
+    "backup": "node restoreDB.js",
     "migration": "node -e \"require('./__tests__/_utils').runMigration()\"",
     "seed": "node -e \"require('./__tests__/_utils').runSeed()\""
   },
