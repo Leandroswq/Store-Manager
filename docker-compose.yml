@@ -18,6 +18,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_HOST=db
       - MYSQL_DATABASE=StoreManager
+      - MYSQL_PORT=3306
       - PORT=3000
 
   db:
