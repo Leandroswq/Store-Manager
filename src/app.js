@@ -1,7 +1,12 @@
 const express = require('express');
 require('express-async-errors');
+const YAML = require('yamljs');
+const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
 const errorMiddleware = require('./middlewares/errorMiddlewarer');
 require('dotenv').config();
+
+const swaggerDocument = YAML.load('docs.yml');
 
 const productsRouter = require('./routers/productsRouters');
 const salesRouter = require('./routers/salesRouters');
@@ -9,7 +14,9 @@ const salesRouter = require('./routers/salesRouters');
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/products', productsRouter);
 app.use('/sales', salesRouter);
 

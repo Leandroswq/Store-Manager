@@ -1,0 +1,430 @@
+openapi: '3.0.0'
+info:
+  title: Store-Manager
+  version: '1.0'
+servers:
+  - url: http://localhost:3000/
+
+tags:
+  - name: Produtos
+  - name: Vendas
+
+paths:
+  /products:
+    get:
+      tags:
+        - Produtos
+      summary: 'Listar os produtos'      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/produtos'
+
+    post:
+      tags:
+        - Produtos
+      summary: 'Cadastrar produto'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NomeDOProduto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/produtos'
+
+  /products/search:
+    get:
+      tags:
+        - Produtos
+      summary: Pesquisar produtos pelo nome
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+            example: bolsa
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/produtos'
+
+  /products/{id}:
+    get:
+      tags:
+        - Produtos
+      summary: Listar um produto pelo id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/produto'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+
+    put:
+      summary: 'Atualizar um produto'
+      tags:
+        - Produtos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NomeDOProduto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/produto'
+   
+    delete:
+      summary: 'Deletar um produto pelo id'
+      tags:
+        - Produtos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+  
+  /sales:
+    get:
+      tags:
+        - Vendas
+      summary: 'Listar todas as vendas'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendas'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/saleNotFound'
+
+    
+    post:
+      tags:
+        - Vendas
+      summary: Validar e cadastrar uma venda
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendaRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendaResponsePost'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/ProductNotFound'
+                    - $ref: '#/components/schemas/ProductIsRequired'
+                    - $ref: '#/components/schemas/quantityIsRequired'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductNotFound'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quantitySize'
+                
+  /sales/{id}:
+    get:
+      tags:
+        - Vendas
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: 'Listar uma venda pelo id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/venda'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/saleNotFound'
+
+    delete:
+      summary: 'Deletar uma venda'
+      tags:
+        - Vendas
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/saleNotFound'
+    put:
+      summary: 'Atualizar uma venda'
+      tags:
+        - Vendas
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendaUpdate'
+
+
+components:
+  schemas:
+    NomeDOProduto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: bolsa
+
+    produto:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name: 
+          type: string
+          example: bolsa
+    
+    produtos: 
+      type: array
+      items:
+       $ref: '#/components/schemas/produto'
+    
+    ProductNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Product not found
+
+    vendaProd1:
+      type: object
+      properties:
+        productId:
+          type: number
+          example: 1
+        quantity: 
+          type: number
+          example: 1
+
+    vendaProd2: 
+      type: object
+      properties:
+        productId:
+          type: number
+          example: 5
+        quantity: 
+          type: number
+          example: 13
+    
+    vendaRequest:
+      type: array
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/vendaProd1'
+        - $ref: '#/components/schemas/vendaProd2'
+    
+    vendaResponsePost:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 3
+        itemsSold:
+          $ref: '#/components/schemas/vendaRequest'
+    
+    vendaUpdate:
+      type: object
+      properties:
+        saleId:
+          type: number
+          example: 1
+        itemsUpdated:
+          type: array
+          items:
+            oneOf:
+              - type: object
+                properties:
+                  productId:
+                    type: number
+                    example: 2
+                  quantity: 
+                    type: number
+                    example: 6
+  
+    vendas:
+      type: array
+      items:
+        oneOf:
+        - type: object
+          properties:
+            saleId:
+              type: number
+              example: 1
+            date:
+              type: string
+              example: '2021-09-09T04:54:29.000Z'
+            productId:
+              type: number
+              example: 2
+            quantity: 
+              type: number
+              example: 6
+        - type: object
+          properties:
+            saleId:
+              type: number
+              example: 2
+            date:
+              type: string
+              example: '2021-09-08T04:54:29.000Z'
+            productId:
+              type: number
+              example: 1
+            quantity: 
+              type: number
+              example: 3
+    
+    venda:
+      type: array
+      items:
+        oneOf:
+        - type: object
+          properties:
+            date:
+              type: string
+              example: '2021-09-09T04:54:29.000Z'
+            productId:
+              type: number
+              example: 2
+            quantity: 
+              type: number
+              example: 6
+        - type: object
+          properties:
+            date:
+              type: string
+              example: '2021-09-08T04:54:29.000Z'
+            productId:
+              type: number
+              example: 1
+            quantity: 
+              type: number
+              example: 3
+
+    ProductIsRequired:
+      type: object
+      properties:
+        message:
+          type: string
+          example: '"productId" is required'
+
+    quantityIsRequired:
+      type: object
+      properties:
+        message:
+          type: string
+          example: '"quantity" is required'
+    
+    quantitySize:
+      type: object
+      properties:
+        message:
+          type: string
+          example: '"quantity" must be greater than or equal to 1'
+
+    saleNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Sale not found
