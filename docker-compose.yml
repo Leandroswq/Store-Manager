@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  api:
+    image: node:16.16.0-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    container_name: store_Manager_API
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+    ports:
+      - 3000:3000
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=StoreManager
+      - PORT=3000
+
+  db:
+    image: mysql:5.7
+    container_name: store_Manager_MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - 3306:3306
+
+networks:
+  default:
+    name: store_manager_net

@@ -12,7 +12,12 @@
     "start": "node index.js",
     "debug": "nodemon --ignore coverage index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
-    "backup": "node restoreDB.js"
+    "backup": "node restoreDB.js",
+    "compose": "docker-compose down && docker-compose up -d",
+    "container:start": "docker exec -it store_Manager_API npm start",
+    "container:test": "docker exec -it store_Manager_API npm test",
+    "container:debug": "docker exec -it store_Manager_API npm run debug",
+    "container:lint": "docker exec -it store_Manager_API npm run lint"
   },
   "repository": {
     "type": "git",
