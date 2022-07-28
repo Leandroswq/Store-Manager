@@ -17,7 +17,8 @@
     "container:start": "docker exec -it store_Manager_API npm start",
     "container:test": "docker exec -it store_Manager_API npm test",
     "container:debug": "docker exec -it store_Manager_API npm run debug",
-    "container:lint": "docker exec -it store_Manager_API npm run lint"
+    "container:lint": "docker exec -it store_Manager_API npm run lint",
+    "container:backup": "docker exec -it store_Manager_API npm run backup"
   },
   "repository": {
     "type": "git",
