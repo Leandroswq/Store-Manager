@@ -25,6 +25,9 @@ npm install
 
 ## Local
 ### 3 - Crie um arquivo .env na raiz do projeto e copie as variáveis de ambiente do arquivo .env.example para ele.  
+
+Lembre-se de atualizar as variáveis de ambiente de acordo com acordo com a sua maquina
+
 <br>
 
 ### 4 - No arquivo .env atualize os valores das variáveis de ambiente de acordo com as suas necessidades
